@@ -293,5 +293,14 @@ public class Team {
             this.losses = losses;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "position=" + position +
+                ", teamName='" + teamName + '\'' +
+                ", points=" + points +
+                '}';
+    }
 }
 

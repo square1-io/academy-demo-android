@@ -21,11 +21,13 @@ public class AdapterTeams extends RecyclerView.Adapter<AdapterTeams.TeamViewHold
 
     List<Team> teams;
     Context context;
+    OnItemClickListener clickListener;
 
-    public AdapterTeams(Context context) {
+    public AdapterTeams(Context context, OnItemClickListener clickListener) {
 
-        this.teams = new ArrayList<>();
         this.context = context;
+        this.clickListener = clickListener;
+        this.teams = new ArrayList<>();
     }
 
     public void updateContents(ArrayList<Team> newTeams) {
@@ -35,26 +37,30 @@ public class AdapterTeams extends RecyclerView.Adapter<AdapterTeams.TeamViewHold
         notifyDataSetChanged();
     }
 
-
-
     @Override
     public TeamViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_team, parent, false);
+        final View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_team, parent, false);
 
-        TeamViewHolder teamViewHolder = new TeamViewHolder(rootView);
-        return teamViewHolder;
+        return new TeamViewHolder(rootView);
     }
 
     @Override
-    public void onBindViewHolder(TeamViewHolder holder, int position) {
+    public void onBindViewHolder(final TeamViewHolder holder, int position) {
 
-        Team team = teams.get(position);
+        final Team team = teams.get(position);
 
         holder.tablePosition.setText(String.valueOf(team.getPosition()));
         holder.name.setText(team.getTeamName());
         holder.score.setText(String.valueOf(team.getPoints()) + " points");
 
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                clickListener.onItemClick(team);
+            }
+        });
     }
 
     @Override
@@ -78,5 +84,9 @@ public class AdapterTeams extends RecyclerView.Adapter<AdapterTeams.TeamViewHold
         }
     }
 
+    public interface OnItemClickListener {
+
+        void onItemClick(Team team);
+    }
 }
 
